@@ -21,6 +21,7 @@ class PartnerFrame(QWidget):
         title.setObjectName("title_frame")
         self.layout.addWidget(title)
 
+        # добавление картинки
         self.add_pictures()
 
         scroll_area = QScrollArea()

@@ -2,7 +2,6 @@ import config
 import psycopg
 import pandas as pd
 
-
 connection = psycopg.connect(
     host = config.HOST,
     user = config.USER,

@@ -3,7 +3,6 @@ import sys
 from Database import db
 from frames import partner_frame
 
-
 class MainApplication(QWidget):
     def __init__(self):
         super().__init__()
@@ -32,15 +31,19 @@ style = '''
     #qlabel-card-right{
         font-size: 26px;
         qproperty-alignment: AlignRight;
+        padding-right: 20px;
         }
     #qlabel-card-main {
         font-size: 20px;
+        padding-left: 20px;
     }
     #qlabel-card{
         font-size: 18px;
+        padding-left: 20px;
     }
     #partner_card {
         background-color: white;
+        border: 2px solid gray;
     }
     '''
 
