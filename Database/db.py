@@ -186,3 +186,33 @@ class Database():
         except Exception as error:
             print(f'Ошибка: {error}')
             return False
+
+    def take_sales_info(self, partner_name: str):
+        '''
+        Функция получения информации о продажах партнера
+        :param partner_name: имя партнера
+        :return:
+        '''
+        try:
+            query = f'''
+                    SELECT *
+                    FROM partner_products_import
+                    WHERE partner_name_fk = '{partner_name}';
+                    '''
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+            partners_data = []
+            for data in cursor.fetchall():
+                partners_data.append(
+                    {
+                        'production_name_fk': data[0].strip(),
+                        'partner_name_fk': data[1].strip(),
+                        'count_products': data[2],
+                        'date_prod': data[3],
+                    }
+                )
+            cursor.close()
+            return partners_data
+        except Exception as error:
+            print(f'Ошибка: {error}')
+            return []

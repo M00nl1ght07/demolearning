@@ -1,5 +1,7 @@
 from PySide6.QtWidgets import *
 from PySide6.QtGui import QPixmap
+from frames import history_partner
+from partner_static_name import PartnerStaticName
 
 class PartnerFrame(QWidget):
     def __init__(self, controller):
@@ -114,14 +116,16 @@ class PartnerFrame(QWidget):
             open_update_frame.setObjectName(f'{partner_info["partner_name"]}')
             open_update_frame.clicked.connect(self.open_frame_update)
 
-            open_add_frame = QPushButton('Добавить партнера')
-            open_add_frame.setObjectName("button-card")
+            open_history_frame = QPushButton('История партнера')
+            open_history_frame.setObjectName(f'{partner_info["partner_name"]}')
+            open_history_frame.clicked.connect(lambda checked, name=partner_info["partner_name"]: self.open_history_frame(name))
+            open_history_frame.setObjectName("button-card")
 
             card_layout.addWidget(director)
             card_layout.addWidget(partner_phone)
             card_layout.addWidget(rate_partner)
             card_layout.addWidget(open_update_frame)
-            card_layout.addWidget(open_add_frame)
+            card_layout.addWidget(open_history_frame)
 
             cards_container_layout.addWidget(card)
 
@@ -137,3 +141,13 @@ class PartnerFrame(QWidget):
         sender_name = sender.objectName()
         from frames.update_partner_info import UpdatePartnerInfo
         self.controller.switch_frame(UpdatePartnerInfo, sender_name)
+
+    def open_history_frame(self, partner_name):
+        '''
+        Функция открытия фрейма истории партнера
+        :param partner_name: имя партнера
+        :return: None
+        '''
+        from frames import history_partner
+        PartnerStaticName.set_partner_name(partner_name)
+        self.controller.switch_frame(history_partner.HistoryPartner)
