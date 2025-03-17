@@ -1,7 +1,6 @@
 from PySide6.QtWidgets import *
 from PySide6.QtGui import QPixmap
 
-
 class PartnerFrame(QWidget):
     def __init__(self, controller):
         super().__init__()
@@ -29,7 +28,12 @@ class PartnerFrame(QWidget):
 
         scroll_area.setWidget(self.create_partner_card())
 
+        create_partner_btn = QPushButton("Добавить партнера")
+        from frames.add_partner_info import AddPartnerInfo
+        create_partner_btn.clicked.connect(lambda: self.controller.switch_frame(AddPartnerInfo))
+
         self.layout.addWidget(scroll_area)
+        self.layout.addWidget(create_partner_btn)
 
     def add_pictures(self):
         '''
@@ -56,6 +60,9 @@ class PartnerFrame(QWidget):
         :return: discount
         '''
         count = self.db.sum_cost_partners(partner_name)
+        if count is None or count == 0:  # Добавляем проверку на None и 0
+            return 0
+        
         if count > 300000:
             return 15
         elif count > 50000:
@@ -103,10 +110,30 @@ class PartnerFrame(QWidget):
             rate_partner = QLabel(f'Рейтинг: {partner_info["rate_partner"]}')
             rate_partner.setObjectName("qlabel-card")
 
+            open_update_frame = QPushButton('Редактировать')
+            open_update_frame.setObjectName(f'{partner_info["partner_name"]}')
+            open_update_frame.clicked.connect(self.open_frame_update)
+
+            open_add_frame = QPushButton('Добавить партнера')
+            open_add_frame.setObjectName("button-card")
+
             card_layout.addWidget(director)
             card_layout.addWidget(partner_phone)
             card_layout.addWidget(rate_partner)
+            card_layout.addWidget(open_update_frame)
+            card_layout.addWidget(open_add_frame)
 
             cards_container_layout.addWidget(card)
 
         return card_container
+
+    def open_frame_update(self):
+        '''
+        Функция открытия фрейма по обработчику на кнопку
+        :return: None
+        '''
+        sender = self.sender()
+        print(sender.objectName())
+        sender_name = sender.objectName()
+        from frames.update_partner_info import UpdatePartnerInfo
+        self.controller.switch_frame(UpdatePartnerInfo, sender_name)
